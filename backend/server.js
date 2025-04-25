@@ -1,7 +1,8 @@
-const express = require('express');
-const cors = require('cors');
-const path = require('path');
-require('dotenv').config();
+const express = require("express");
+const mongoose = require("mongoose");
+const cors = require("cors");
+const path = require("path");
+require("dotenv").config();
 
 const app = express();
 
@@ -9,9 +10,23 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+// 環境変数からMongoDB接続URIを取得
+const mongoURI = process.env.MONGO_URI;
+
+// MongoDBに接続
+mongoose
+  .connect(mongoURI)
+  .then(() => {
+    console.log("MongoDB connected");
+  })
+  .catch((err) => {
+    console.error("MongoDB connection error:", err);
+  });
+
+// スキーマとモデルの定義
 // 基本的なルート
-app.get('/api/test', (req, res) => {
-  res.json({ message: 'Backend is working!' });
+app.get("/api/test", (req, res) => {
+  res.json({ message: "Backend is working!" });
 });
 
 const PORT = process.env.PORT || 3000;
