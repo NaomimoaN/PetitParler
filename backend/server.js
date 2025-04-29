@@ -3,6 +3,7 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 const path = require("path");
 require("dotenv").config();
+const wordRoutes = require("./routes/words"); // ルートをインポート
 
 const app = express();
 
@@ -25,11 +26,14 @@ mongoose
 
 // スキーマとモデルの定義
 // 基本的なルート
-app.get("/api/test", (req, res) => {
-  res.json({ message: "Backend is working!" });
-});
+// app.get("/api/test", (req, res) => {
+//   res.json({ message: "Backend is working!" });
+// });
 
-const PORT = process.env.PORT || 3000;
+// エンドポイントを設定
+app.use("/api/words", wordRoutes);
+
+const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
-  console.log(`Server is running on port ${3000}`);
+  console.log(`Server is running on port ${5000}`);
 });

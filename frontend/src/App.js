@@ -1,23 +1,34 @@
-import logo from './logo.svg';
-import './App.css';
+import "./App.css";
+import React from "react";
+import { useState, useEffect } from "react";
+import axios from "axios";
 
 function App() {
+  const [message, setMessage] = useState("");
+
+  useEffect(() => {
+    axios
+      .get("/api/words")
+      .then((response) => {
+        const data = response.data;
+        console.log("words:", data);
+        if (data.length > 0) {
+          setMessage(`Today's 1st Word is ${data[0].word}`);
+        } else {
+          setMessage(`No words for today`);
+        }
+      })
+      .catch((err) => {
+        console.error("error message:", err);
+      });
+  }, []);
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <div>
+        <h1>PetitParler</h1>
+        <p>{message}</p>
+      </div>
     </div>
   );
 }
