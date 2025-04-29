@@ -1,21 +1,27 @@
 const express = require("express");
 const router = express.Router();
-const Word = require('../models/Word');
+const Word = require("../models/Word");
 
-// POSTリクエストを処理するルート 
+// GETリクエストを処理するルート
 router.get("/", async (req, res) => {
   try {
+    console.log("Fetching words from database...");
     const words = await Word.find();
+    console.log("Number of words found:", words.length);
+    console.log("Words data:", words);
     res.json(words);
   } catch (err) {
+    console.error("Error fetching words:", err);
     res.status(500).json({ message: err.message });
   }
-}
-);     
+});
 
+// POSTリクエストを処理するルート
 router.post("/", async (req, res) => {
-  const newWord = new Word(
-    {
+  try {
+    console.log("Received POST request body:", req.body);
+
+    const newWord = new Word({
       french: req.body.french,
       english: req.body.english,
       unit: req.body.unit,
@@ -25,18 +31,23 @@ router.post("/", async (req, res) => {
       exampleTranslation: req.body.exampleTranslation,
       pronunciation: req.body.pronunciation,
       audio: req.body.audio,
-      image: req.body.image
-    },
-    { timestamps: true }
-  );
-})
+      image: req.body.image,
+    });
 
-try {
-  const savedWord = await newWord.save();
-  res.status(201).json(savedWord); 
-} catch (error) {
-  res.status(400).json({ message: error.message });
-}
+    console.log("New word object:", newWord);
+
+    const savedWord = await newWord.save();
+    console.log("Saved word:", savedWord);
+
+    res.status(201).json(savedWord);
+  } catch (error) {
+    console.error("Error saving word:", error);
+    res.status(400).json({
+      message: error.message,
+      details: error.errors,
+    });
+  }
+});
 
 module.exports = router;
 
