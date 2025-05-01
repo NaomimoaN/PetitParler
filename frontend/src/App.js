@@ -2,13 +2,13 @@ import "./App.css";
 import React from "react";
 import { useState, useEffect } from "react";
 import axios from "axios";
-
+import WordList from "./components/WordList";
 // APIのベースURLを設定
 const API_BASE_URL = "http://localhost:5000";
 
 function App() {
-  const [message, setMessage] = useState("");
   const [error, setError] = useState("");
+  const [words, setWords] = useState([]);
 
   useEffect(() => {
     axios
@@ -16,27 +16,20 @@ function App() {
       .then((response) => {
         const data = response.data;
         console.log("words:", data);
-        if (data.length > 0) {
-          setMessage(`Today's 1st Word is ${data[0].french}`);
-        } else {
-          setMessage(`No words for today`);
-        }
+        setWords(data);
         setError("");
       })
       .catch((err) => {
         console.error("error message:", err);
         setError("データの取得に失敗しました。サーバーを確認してください。");
-        setMessage("");
+        setWords([]);
       });
   }, []);
 
   return (
     <div className="App">
-      <div>
-        <h1>PetitParler</h1>
-        {error && <p style={{ color: "red" }}>{error}</p>}
-        <p>{message}</p>
-      </div>
+      {error && <p style={{ color: "red" }}>{error}</p>}
+      <WordList words={words} />
     </div>
   );
 }

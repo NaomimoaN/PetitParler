@@ -5,10 +5,8 @@ const Word = require("../models/Word");
 // GETリクエストを処理するルート
 router.get("/", async (req, res) => {
   try {
-    console.log("Fetching words from database...");
     const words = await Word.find();
-    console.log("Number of words found:", words.length);
-    console.log("Words data:", words);
+    console.log("Found words:", words);
     res.json(words);
   } catch (err) {
     console.error("Error fetching words:", err);
