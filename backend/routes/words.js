@@ -47,6 +47,24 @@ router.post("/", async (req, res) => {
   }
 });
 
+
+// DELETEリクエストを処理するルート
+//ここから復習＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊
+router.delete("/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const deletedWord = await Word.findByIdAndDelete(id);
+    console.log("Deleted word:", deletedWord);
+    res.status(200).json({ message: "Word deleted successfully" });
+  } catch (error) {
+    console.error("Error deleting word:", error);
+    res.status(500).json({ message: "Failed to delete word" });
+  }
+});
+
+
+
+
 module.exports = router;
 
 // 正しい流れを整理すると：
