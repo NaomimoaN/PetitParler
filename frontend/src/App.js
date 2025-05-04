@@ -22,16 +22,29 @@ function App() {
       })
       .catch((err) => {
         console.error("error message:", err);
-        setError("データの取得に失敗しました。サーバーを確認してください。");
+        setError("Failed to fetch words, please check the server");
         setWords([]);
       });
   }, []);
 
+  const handleDelete = (id) => {
+    axios.delete(`${API_BASE_URL}/api/words/${id}`)
+    .then(() => {
+      setWords(words.filter((word) => word._id !== id));
+      setError("");
+    })
+    .catch((err) => {
+      console.error("Error deleting word", err);
+      setError("Failed to delete word, please try again");
+    })
+  };
+  
+
   return (
     <div className="App">
       {error && <p style={{ color: "red" }}>{error}</p>}
-      <WordList words={words} />
-      <WordForm/>
+      <WordList words={words} onDelete={handleDelete} />
+      <WordForm />
     </div>
   );
 }
