@@ -5,6 +5,7 @@ import HomePage from "./pages/HomePage";
 import WordPracticePage from "./pages/WordPracticePage";
 import SentencePracticePage from "./pages/SentencePracticePage";
 import ProgressPage from "./pages/ProgressPage";
+import NavBar from "./components/NavBar";
 
 // APIのベースURLを設定
 const API_BASE_URL = "http://localhost:5000";
@@ -13,6 +14,7 @@ function App() {
   return (
     <div className="App">
       <Router>
+        <NavBar />
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/words" element={<WordPracticePage />} />
